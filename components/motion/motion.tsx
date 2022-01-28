@@ -4,11 +4,10 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const MotionBox = motion<BoxProps>(Box);
 
-export const AnimatePage = (props : any) => {
+export const AnimatePage = (props: any) => {
   return (
     <AnimatePresence initial={true} exitBeforeEnter>
       <MotionBox
-      
         as="main"
         animate="enter"
         exit="exit"
@@ -17,7 +16,7 @@ export const AnimatePage = (props : any) => {
         variants={{
           initial: { opacity: 0, y: -200 },
           enter: { opacity: 1, y: 0 },
-          exit: { opacity: 0, y: 250, }
+          exit: { opacity: 0, y: 250 },
         }}
       >
         {props.children}

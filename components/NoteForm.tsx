@@ -43,21 +43,41 @@ const NoteForm: React.SFC<NoteFormProps> = ({
     handleSubmit,
     formState,
     formState: { errors },
+    reset,
   } = useForm<FormInputs>({
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<FormInputs> = (data) => {
+  const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     let newNote: note = {
       id: "",
       title: data.title,
       body: data.body,
     };
 
+    const fd = new FormData();
+    fd.append("id", "");
+    fd.append("title", data.title);
+    fd.append("body", data.body);
+
+    await fetch("https://secret-app-api.onrender.com/todo/create", {
+      method: "post",
+      body: fd,
+    });
+
+    const resetNote: note = {
+      id: "",
+      title: "",
+      body: "",
+    };
+
+    reset(resetNote);
 
     if (handleNoteCreate) {
       newNote.id = nanoid();
-      if (handleNoteCreate) handleNoteCreate(newNote);
+      if (handleNoteCreate) {
+        handleNoteCreate(newNote);
+      }
     } else {
       newNote.id = selectedNote ? selectedNote.id : "";
       if (handleNoteUpdate) handleNoteUpdate(newNote);
