@@ -55,16 +55,31 @@ const NoteForm: React.SFC<NoteFormProps> = ({
       body: data.body,
     };
 
-    const fd = new FormData();
-    fd.append("id", "");
-    fd.append("title", data.title);
-    fd.append("body", data.body);
-
-    await fetch("https://secret-app-api.onrender.com/todo/create", {
-      method: "post",
-      body: fd,
-    });
-
+    if (handleNoteCreate) {
+      newNote.id = nanoid();
+      if (handleNoteCreate) {
+        handleNoteCreate(newNote);
+        await fetch("https://localhost:5000/", {
+          method: "post",
+          body: JSON.stringify(newNote),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      }
+    } else {
+      newNote.id = selectedNote ? selectedNote.id : "";
+      if (handleNoteUpdate) {
+        handleNoteUpdate(newNote);
+        await fetch("https://localhost:5000/", {
+          method: "put",
+          body: JSON.stringify(newNote),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      }
+    }
     const resetNote: note = {
       id: "",
       title: "",
@@ -72,16 +87,6 @@ const NoteForm: React.SFC<NoteFormProps> = ({
     };
 
     reset(resetNote);
-
-    if (handleNoteCreate) {
-      newNote.id = nanoid();
-      if (handleNoteCreate) {
-        handleNoteCreate(newNote);
-      }
-    } else {
-      newNote.id = selectedNote ? selectedNote.id : "";
-      if (handleNoteUpdate) handleNoteUpdate(newNote);
-    }
     onClose();
   };
 

@@ -34,12 +34,30 @@ const NotesList: React.SFC<NotesListProps> = ({
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const onDelete = (
+  console.log('====================================');
+  console.log(notes);
+  console.log('====================================');
+
+  const onDelete = async (
     id: string,
     e: React.MouseEvent<SVGElement, MouseEvent>
   ) => {
+    onClose;
     const newNotes: note[] = notes.filter((note: note) => note.id !== id);
     setNotes(newNotes);
+    console.log('====================================');
+    console.log(id);
+    console.log('====================================');
+    const idObj = {
+      id: id,
+    };
+    await fetch("https://localhost:5000/", {
+      method: "delete",
+      body: JSON.stringify(idObj),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     showToast();
     e.stopPropagation();
   };
@@ -49,9 +67,9 @@ const NotesList: React.SFC<NotesListProps> = ({
     e.stopPropagation();
   };
 
-  const handleSelectedNote = (note: note) => {
-    setSelectedNote(note);
-    onOpen();
+  const handleSelectedNote = (note: note, isOpen: boolean) => {
+    isOpen && setSelectedNote(note);
+    isOpen ? onOpen() : onClose();
   };
 
   const showToast = () => {
@@ -69,12 +87,15 @@ const NotesList: React.SFC<NotesListProps> = ({
       <motion.ul>
         <Box minH={"50vh"}>
           <StackGrid columnWidth={330}>
-            {notes.map((note) => (
-              <Fade in={true}>
+            {notes.map((note, index) => (
+              <Fade in={true} key={index}>
                 <motion.div
                   whileHover={{ y: -10 }}
                   layoutId={note.id}
-                  onClick={() => handleSelectedNote(note)}
+                  onClick={() => {
+                    //set false to open modal
+                    handleSelectedNote(note, false);
+                  }}
                 >
                   <Center py={2} px={2} key={note.id}>
                     <Box
@@ -128,7 +149,11 @@ const NotesList: React.SFC<NotesListProps> = ({
                                 as={DeleteIcon}
                                 w={4}
                                 h={4}
-                                onClick={(e) => onDelete(note.id, e)}
+                                onClick={(e) => {
+                                  //set true to close modal
+                                  handleSelectedNote(note, true);
+                                  onDelete(note.id, e);
+                                }}
                               />
                             </HStack>
                           </Box>

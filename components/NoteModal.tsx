@@ -5,7 +5,7 @@ import {
   ModalBody,
   ModalOverlay,
   ModalHeader,
-  ModalCloseButton
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -18,7 +18,7 @@ export interface NoteFormProps {
 const NoteModal: React.SFC<NoteFormProps> = ({
   isOpen,
   onClose,
-  selectedNote
+  selectedNote,
 }) => {
   return (
     <AnimatePresence>
@@ -39,7 +39,9 @@ const NoteModal: React.SFC<NoteFormProps> = ({
             </motion.div>
             <ModalCloseButton />
             <motion.div>
-              <ModalBody pb={6}>{selectedNote?.body}</ModalBody>
+              <ModalBody pb={6} maxH={500}>
+                {selectedNote?.body}
+              </ModalBody>
             </motion.div>
           </ModalContent>
         </Modal>

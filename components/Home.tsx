@@ -15,6 +15,7 @@ export const HomePage: React.SFC<HomePageProps> = ({ notes, setNotes }) => {
   const [selectedNote, setSelectedNote] = React.useState<note>();
   const toast = useToast();
 
+
   const handleClick = (id: string) => {
     const selectedNote = notes.find((note: note) => note.id === id);
     setSelectedNote(selectedNote);
@@ -35,7 +36,7 @@ export const HomePage: React.SFC<HomePageProps> = ({ notes, setNotes }) => {
       status: "success",
       position: "top",
       duration: 2000,
-      isClosable: true
+      isClosable: true,
     });
   };
 
@@ -43,11 +44,7 @@ export const HomePage: React.SFC<HomePageProps> = ({ notes, setNotes }) => {
     <>
       <AnimatePage>
         {notes.length ? (
-          <Note
-            notes={notes}
-            handleClick={handleClick}
-            setNotes={setNotes}
-          />
+          <Note notes={notes} handleClick={handleClick} setNotes={setNotes} />
         ) : (
           <HeroSection />
         )}
