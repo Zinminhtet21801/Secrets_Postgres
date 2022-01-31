@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Spinner } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
 import Header from "../components/Header";
@@ -6,26 +6,46 @@ import Note from "../components/Note";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import { HomePage } from "../components/Home";
+import ReactPaginate from "react-paginate";
 
 export default function Home() {
   const [notes, setNotes] = useState<note[]>([]);
+  const [notesCount, setNotesCount] = useState<number>(0);
+  const [pageOffset, setPageOffset] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  console.log("====================================");
+  console.log(notesCount / 12);
+  console.log("====================================");
 
   useEffect(() => {
+    setIsLoading(true);
     const getData = async () => {
-      await fetch("https://localhost:5000/getAll", {
+      await fetch(`https://localhost:5000/getAll/${pageOffset}`, {
         method: "get",
       })
         .then((res) => res.json())
-        .then((data) => setNotes(data));
+        .then((data) => {
+          setNotes(data[0]);
+          setNotesCount(data[1]);
+        });
+      setIsLoading(false);
     };
     getData();
-  }, []);
+  }, [pageOffset]);
 
   const handleNoteCreate = (note: note) => {
     const newNotesState: note[] = [...notes];
     newNotesState.push(note);
     setNotes(newNotesState);
   };
+
+  if (isLoading)
+    return (
+      <Box w={"100vw"} h={"100vh"} display="flex" justifyContent={"center"} alignItems="center" >
+        <Spinner size="xl" color="red.500" />
+      </Box>
+    );
   return (
     <Box>
       <Box maxW={"1050px"} marginInline="auto" p={5} minH={"100vh"}>
@@ -36,6 +56,29 @@ export default function Home() {
         </Head>
         <Header handleNoteCreate={handleNoteCreate} />
         <HomePage notes={notes} setNotes={setNotes} />
+
+        {notes.length > 0 && (
+          <ReactPaginate
+            previousLabel="Previous"
+            nextLabel="Next"
+            pageClassName="page-item"
+            pageLinkClassName="page-link"
+            previousClassName="page-item"
+            previousLinkClassName="page-link"
+            nextClassName="page-item"
+            nextLinkClassName="page-link"
+            breakLabel="..."
+            breakClassName="page-item"
+            breakLinkClassName="page-link"
+            pageCount={notesCount / 12}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            containerClassName="pagination"
+            activeClassName="active"
+            forcePage={pageOffset}
+            onPageChange={(e) => setPageOffset(e.selected)}
+          />
+        )}
         <Footer />
       </Box>
     </Box>

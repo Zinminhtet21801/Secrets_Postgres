@@ -53,6 +53,7 @@ const NoteForm: React.SFC<NoteFormProps> = ({
       id: "",
       title: data.title,
       body: data.body,
+      createdAt: new Date(),
     };
 
     if (handleNoteCreate) {
@@ -84,6 +85,7 @@ const NoteForm: React.SFC<NoteFormProps> = ({
       id: "",
       title: "",
       body: "",
+      createdAt: new Date(),
     };
 
     reset(resetNote);

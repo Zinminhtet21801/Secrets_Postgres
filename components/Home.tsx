@@ -16,6 +16,7 @@ export const HomePage: React.SFC<HomePageProps> = ({ notes, setNotes }) => {
   const toast = useToast();
 
 
+
   const handleClick = (id: string) => {
     const selectedNote = notes.find((note: note) => note.id === id);
     setSelectedNote(selectedNote);

@@ -17,6 +17,7 @@ import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { motion } from "framer-motion";
 import NoteModal from "./NoteModal";
 import StackGrid from "react-stack-grid";
+import Moment from "react-moment";
 
 export interface NotesListProps {
   notes: note[];
@@ -34,20 +35,13 @@ const NotesList: React.SFC<NotesListProps> = ({
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  console.log('====================================');
-  console.log(notes);
-  console.log('====================================');
-
   const onDelete = async (
     id: string,
     e: React.MouseEvent<SVGElement, MouseEvent>
   ) => {
-    onClose;
+    e.stopPropagation();
     const newNotes: note[] = notes.filter((note: note) => note.id !== id);
     setNotes(newNotes);
-    console.log('====================================');
-    console.log(id);
-    console.log('====================================');
     const idObj = {
       id: id,
     };
@@ -59,7 +53,6 @@ const NotesList: React.SFC<NotesListProps> = ({
       },
     });
     showToast();
-    e.stopPropagation();
   };
 
   const onClick = (id: string, e: React.MouseEvent<SVGElement, MouseEvent>) => {
@@ -67,9 +60,9 @@ const NotesList: React.SFC<NotesListProps> = ({
     e.stopPropagation();
   };
 
-  const handleSelectedNote = (note: note, isOpen: boolean) => {
-    isOpen && setSelectedNote(note);
-    isOpen ? onOpen() : onClose();
+  const handleSelectedNote = (note: note) => {
+    setSelectedNote(note);
+    onOpen();
   };
 
   const showToast = () => {
@@ -93,8 +86,7 @@ const NotesList: React.SFC<NotesListProps> = ({
                   whileHover={{ y: -10 }}
                   layoutId={note.id}
                   onClick={() => {
-                    //set false to open modal
-                    handleSelectedNote(note, false);
+                    handleSelectedNote(note);
                   }}
                 >
                   <Center py={2} px={2} key={note.id}>
@@ -149,11 +141,7 @@ const NotesList: React.SFC<NotesListProps> = ({
                                 as={DeleteIcon}
                                 w={4}
                                 h={4}
-                                onClick={(e) => {
-                                  //set true to close modal
-                                  handleSelectedNote(note, true);
-                                  onDelete(note.id, e);
-                                }}
+                                onClick={(e) => onDelete(note.id, e)}
                               />
                             </HStack>
                           </Box>
@@ -173,6 +161,15 @@ const NotesList: React.SFC<NotesListProps> = ({
                           noOfLines={{ base: 3, md: 4 }}
                         >
                           {note.body}
+                        </Text>
+
+                        <Text
+                          color={"gray.500"}
+                          fontSize="md"
+                          noOfLines={{ base: 3, md: 4 }}
+                          textAlign="right"
+                        >
+                          {<Moment fromNow>{note?.createdAt}</Moment>}
                         </Text>
                       </Stack>
                     </Box>
