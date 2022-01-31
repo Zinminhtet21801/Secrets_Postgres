@@ -14,10 +14,6 @@ export default function Home() {
   const [pageOffset, setPageOffset] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  console.log("====================================");
-  console.log(notesCount / 12);
-  console.log("====================================");
-
   useEffect(() => {
     setIsLoading(true);
     const getData = async () => {
@@ -32,17 +28,24 @@ export default function Home() {
       setIsLoading(false);
     };
     getData();
-  }, [pageOffset]);
+  }, [pageOffset, notesCount]);
 
   const handleNoteCreate = (note: note) => {
-    const newNotesState: note[] = [...notes];
-    newNotesState.push(note);
-    setNotes(newNotesState);
+    // setNotesCount(notesCount + 1);
+    // const newNotesState: note[] = [...notes];
+    // newNotesState.push(note);
+    // setNotes(newNotesState);
   };
 
   if (isLoading)
     return (
-      <Box w={"100vw"} h={"100vh"} display="flex" justifyContent={"center"} alignItems="center" >
+      <Box
+        w={"100vw"}
+        h={"100vh"}
+        display="flex"
+        justifyContent={"center"}
+        alignItems="center"
+      >
         <Spinner size="xl" color="red.500" />
       </Box>
     );
@@ -70,9 +73,9 @@ export default function Home() {
             breakLabel="..."
             breakClassName="page-item"
             breakLinkClassName="page-link"
-            pageCount={notesCount / 12}
+            pageCount={Math.ceil(notesCount / 12)}
             marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
+            // pageRangeDisplayed={3}
             containerClassName="pagination"
             activeClassName="active"
             forcePage={pageOffset}

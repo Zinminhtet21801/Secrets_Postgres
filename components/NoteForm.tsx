@@ -71,7 +71,7 @@ const NoteForm: React.SFC<NoteFormProps> = ({
     } else {
       newNote.id = selectedNote ? selectedNote.id : "";
       if (handleNoteUpdate) {
-        handleNoteUpdate(newNote);
+        // handleNoteUpdate(newNote);
         await fetch("https://localhost:5000/", {
           method: "put",
           body: JSON.stringify(newNote),
