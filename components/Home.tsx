@@ -23,7 +23,7 @@ export const HomePage: React.SFC<HomePageProps> = ({ notes, setNotes }) => {
     onOpen();
   };
 
-  const handleNoteUpdate = (newNote: note) => {
+  const handleNoteUpdate  = (newNote: note) => {
     const newNotesState: note[] = [...notes];
     const index = notes.findIndex((note: note) => note.id === newNote.id);
     newNotesState[index] = newNote;

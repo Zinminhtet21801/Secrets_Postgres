@@ -60,7 +60,7 @@ const NoteForm: React.SFC<NoteFormProps> = ({
       newNote.id = nanoid();
       if (handleNoteCreate) {
         handleNoteCreate(newNote);
-        await fetch("https://localhost:5000/", {
+        await fetch("http://localhost:5000/", {
           method: "post",
           body: JSON.stringify(newNote),
           headers: {
@@ -71,8 +71,8 @@ const NoteForm: React.SFC<NoteFormProps> = ({
     } else {
       newNote.id = selectedNote ? selectedNote.id : "";
       if (handleNoteUpdate) {
-        // handleNoteUpdate(newNote);
-        await fetch("https://localhost:5000/", {
+        handleNoteUpdate(newNote);
+        await fetch("http://localhost:5000/", {
           method: "put",
           body: JSON.stringify(newNote),
           headers: {

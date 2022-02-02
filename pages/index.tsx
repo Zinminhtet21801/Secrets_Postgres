@@ -8,16 +8,32 @@ import { useEffect, useState } from "react";
 import { HomePage } from "../components/Home";
 import ReactPaginate from "react-paginate";
 
-export default function Home() {
-  const [notes, setNotes] = useState<note[]>([]);
-  const [notesCount, setNotesCount] = useState<number>(0);
+export async function getStaticProps() {
+  const res = await fetch("http://localhost:5000/getAll/0");
+  const data = await res.json();
+  return {
+    props: {
+      preNotes: data[0],
+      preNotesCount: data[1],
+    },
+  };
+}
+
+export interface HomeProps {
+  preNotes: note[];
+  preNotesCounts: number;
+}
+
+const Home : React.SFC<HomeProps> =({ preNotes, preNotesCounts }) => {
+  const [notes, setNotes] = useState<note[]>(preNotes);
+  const [notesCount, setNotesCount] = useState<number>(preNotesCounts);
   const [pageOffset, setPageOffset] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
     const getData = async () => {
-      await fetch(`https://localhost:5000/getAll/${pageOffset}`, {
+      await fetch(`http://localhost:5000/getAll/${pageOffset}`, {
         method: "get",
       })
         .then((res) => res.json())
@@ -25,17 +41,18 @@ export default function Home() {
           setNotes(data[0]);
           setNotesCount(data[1]);
         });
-      setIsLoading(false);
+      // setIsLoading(false);
     };
     getData();
   }, [pageOffset, notesCount]);
 
   const handleNoteCreate = (note: note) => {
-    // setNotesCount(notesCount + 1);
+    setNotesCount(notesCount + 1);
     // const newNotesState: note[] = [...notes];
     // newNotesState.push(note);
     // setNotes(newNotesState);
   };
+
 
   if (isLoading)
     return (
@@ -60,7 +77,7 @@ export default function Home() {
         <Header handleNoteCreate={handleNoteCreate} />
         <HomePage notes={notes} setNotes={setNotes} />
 
-        {notes.length > 0 && (
+        {notesCount > 12 && (
           <ReactPaginate
             previousLabel="Previous"
             nextLabel="Next"
@@ -87,3 +104,8 @@ export default function Home() {
     </Box>
   );
 }
+
+export default Home;
+
+
+

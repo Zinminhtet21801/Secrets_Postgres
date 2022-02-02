@@ -45,7 +45,7 @@ const NotesList: React.SFC<NotesListProps> = ({
     const idObj = {
       id: id,
     };
-    await fetch("https://localhost:5000/", {
+    await fetch("http://localhost:5000/", {
       method: "delete",
       body: JSON.stringify(idObj),
       headers: {
@@ -134,7 +134,7 @@ const NotesList: React.SFC<NotesListProps> = ({
                                 h={4}
                                 onClick={(e) => onClick(note.id, e)}
                               />
-                              <Icon
+                              {/* <Icon
                                 color={"green.500"}
                                 _hover={{ color: "#ca364a" }}
                                 _groupHover={{ display: "block" }}
@@ -142,7 +142,7 @@ const NotesList: React.SFC<NotesListProps> = ({
                                 w={4}
                                 h={4}
                                 onClick={(e) => onDelete(note.id, e)}
-                              />
+                              /> */}
                             </HStack>
                           </Box>
                         </Flex>
