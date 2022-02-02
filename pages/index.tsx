@@ -9,7 +9,7 @@ import { HomePage } from "../components/Home";
 import ReactPaginate from "react-paginate";
 
 export async function getStaticProps() {
-  const res = await fetch("http://localhost:5000/getAll/0");
+  const res = await fetch("https://secrets-server.onrender.com/getAll/0");
   const data = await res.json();
   return {
     props: {
@@ -33,7 +33,7 @@ const Home : React.SFC<HomeProps> =({ preNotes, preNotesCounts }) => {
   useEffect(() => {
     // setIsLoading(true);
     const getData = async () => {
-      await fetch(`http://localhost:5000/getAll/${pageOffset}`, {
+      await fetch(`https://secrets-server.onrender.com/getAll/${pageOffset}`, {
         method: "get",
       })
         .then((res) => res.json())

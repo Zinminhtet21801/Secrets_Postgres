@@ -60,7 +60,7 @@ const NoteForm: React.SFC<NoteFormProps> = ({
       newNote.id = nanoid();
       if (handleNoteCreate) {
         handleNoteCreate(newNote);
-        await fetch("http://localhost:5000/", {
+        await fetch("https://secrets-server.onrender.com/", {
           method: "post",
           body: JSON.stringify(newNote),
           headers: {
@@ -72,7 +72,7 @@ const NoteForm: React.SFC<NoteFormProps> = ({
       newNote.id = selectedNote ? selectedNote.id : "";
       if (handleNoteUpdate) {
         handleNoteUpdate(newNote);
-        await fetch("http://localhost:5000/", {
+        await fetch("https://secrets-server.onrender.com/", {
           method: "put",
           body: JSON.stringify(newNote),
           headers: {
